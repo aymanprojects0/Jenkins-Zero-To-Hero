@@ -1,24 +1,23 @@
-
 pipeline {
     agent any
- 
+
     tools {
         maven 'Maven3'
     }
- 
+
     environment {
         SONAR_ORG = 'aymanprojects0'
         SONAR_PROJECT_KEY = 'aymanprojects0_Jenkins-Zero-To-Hero'
         DOCKER_IMAGE = "spring-boot-app:${BUILD_NUMBER}"
     }
- 
+
     stages {
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/aymanprojects0/Jenkins-Zero-To-Hero.git'
             }
         }
- 
+
         stage('Build & Unit Tests') {
             steps {
                 dir('java-maven-sonar-argocd-helm-k8s/spring-boot-app') {
@@ -31,7 +30,7 @@ pipeline {
                 }
             }
         }
- 
+
         stage('SonarCloud Analysis') {
             steps {
                 dir('java-maven-sonar-argocd-helm-k8s/spring-boot-app') {
@@ -47,7 +46,7 @@ pipeline {
                 }
             }
         }
- 
+
         stage('Build Docker Image') {
             steps {
                 dir('java-maven-sonar-argocd-helm-k8s/spring-boot-app') {
@@ -56,7 +55,7 @@ pipeline {
             }
         }
     }
- 
+
     post {
         success {
             echo 'Pipeline terminé avec succès : build, tests, analyse SonarCloud et image Docker créée.'
